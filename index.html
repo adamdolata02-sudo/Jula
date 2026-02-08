@@ -8,9 +8,11 @@
   <style>
     :root{
       --bg:#0b0b12;
-      --card:#141427;
       --text:#f5f5ff;
       --muted:#b9b9d6;
+      --cardA: rgba(255,255,255,.06);
+      --cardB: rgba(255,255,255,.03);
+      --border: rgba(255,255,255,.10);
       --accent:#ff4da6;
       --green:#22c55e;
       --green2:#16a34a;
@@ -28,213 +30,305 @@
       padding:24px;
       overflow:hidden;
     }
-    .wrap{width:min(780px,100%);}
+    .wrap{width:min(820px,100%);}
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(180deg, var(--cardA), var(--cardB));
+      border:1px solid var(--border);
       border-radius:18px;
       padding:22px;
       box-shadow:0 18px 60px rgba(0,0,0,.45);
       position:relative;
       z-index:2;
     }
-    h1{margin:0 0 6px;font-size:22px}
-    p{margin:8px 0;color:var(--muted);line-height:1.35}
-    .badge{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,77,166,.16);
-      border:1px solid rgba(255,77,166,.35);
-      color:#ffd3ea;
-      white-space:nowrap;
+
+    /* Header */
+    .heroTitle{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      margin:4px 0 16px;
+      text-align:center;
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:36px;
+      line-height:1.05;
     }
+    .heroTitle .heart{font-size:30px; filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));}
+    .sub{
+      margin:0 0 14px;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.35;
+      font-size:15px;
+    }
+
     .panel{
-      margin-top:14px;
+      margin-top:12px;
       padding:16px;
       border-radius:14px;
       background:rgba(0,0,0,.18);
       border:1px solid rgba(255,255,255,.08);
     }
-    .start{text-align:center}
-    .big{font-size:16px;color:var(--text);max-width:60ch;margin:12px auto}
+
+    /* Start */
+    .start{text-align:center;padding:18px 10px}
+    .start h2{margin:0 0 10px;font-size:22px}
+    .big{font-size:16px;color:var(--text);max-width:64ch;margin:12px auto;line-height:1.35}
+    .note{font-size:12px;color:var(--muted);margin-top:10px}
     .btn{
-      border-radius:14px;
-      padding:14px 18px;
-      cursor:pointer;
-      font-weight:700;
-      font-size:16px;
-      border:none;
+      border:none;border-radius:18px;padding:16px 26px;cursor:pointer;
+      font-weight:900;font-size:18px;user-select:none;
+      transition:.12s transform,.12s filter;
     }
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.02)}
     .btnStart{
       background:linear-gradient(180deg,var(--green),var(--green2));
-      color:#06210f;
-      font-size:18px;
-      padding:16px 26px;
-      border-radius:18px;
+      color:#06210f;box-shadow:0 12px 30px rgba(34,197,94,.20);
     }
-    .btn:hover{transform:translateY(-1px)}
+
+    /* Quiz */
+    .qTitle{margin:0 0 12px;font-size:20px;line-height:1.2}
     .answers{display:grid;gap:10px}
     .choice{
-      width:100%;
-      padding:12px;
-      border-radius:12px;
+      width:100%;padding:12px;border-radius:12px;
       border:1px solid rgba(255,255,255,.15);
       background:rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
-      text-align:left;
-      font-size:15px;
+      color:var(--text);cursor:pointer;text-align:left;font-size:15px;
+      transition:.12s transform,.12s background,.12s border;
     }
-    .choice:hover{background:rgba(255,255,255,.1)}
-    .progress{
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.1);
-      overflow:hidden;
-      margin-top:14px;
+    .choice:hover{transform:translateY(-1px);background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.22)}
+    .choice:disabled{cursor:not-allowed;opacity:.95}
+    .mini{margin-top:12px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* Final */
+    .final{text-align:center;padding:16px 10px}
+    .final .official{font-size:36px;font-weight:950;margin:2px 0 10px;letter-spacing:.4px}
+    .final .question{font-size:26px;font-weight:800;margin:0 0 18px;line-height:1.25}
+    .two{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+    .btnYes{
+      background:rgba(255,77,166,.22);border:1px solid rgba(255,77,166,.55);
+      color:#ffd3ea;padding:16px 26px;font-size:20px;border-radius:16px;cursor:pointer;font-weight:900;
     }
-    .bar{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,var(--accent),#ff8bd1);
+    .btnNo{
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);
+      color:var(--text);padding:16px 26px;font-size:20px;border-radius:16px;cursor:pointer;font-weight:900;
     }
+    .btnYes:hover,.btnNo:hover{transform:translateY(-1px)}
+
     .hidden{display:none}
-    .final{text-align:center}
-    .two{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .ghost{background:rgba(255,255,255,.08);color:var(--text)}
-    .hearts{
-      position:fixed;inset:0;pointer-events:none;z-index:1;
+
+    /* Emoji burst */
+    .burstLayer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+    .burst{
+      position:absolute;will-change:transform,opacity;opacity:.98;
+      text-shadow:0 10px 26px rgba(0,0,0,.35);
+      animation:floatUp linear forwards;
     }
-    .heart{
-      position:absolute;
-      font-size:18px;
-      animation:fly 4s linear forwards;
+    @keyframes floatUp{
+      0%{transform:translateY(0) scale(1);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateY(-110vh) scale(1.35);opacity:0}
     }
-    @keyframes fly{
-      from{transform:translateY(100vh);opacity:1}
-      to{transform:translateY(-120vh);opacity:0}
+
+    /* Celebration */
+    .celebrate{text-align:center;padding:22px 10px}
+    .celebrate h2{margin:0 0 10px;font-size:36px;font-weight:950}
+    .celebrate p{margin:0;color:var(--muted);font-size:16px;line-height:1.35}
+
+    /* Fade-in */
+    .fade-in{
+      opacity:0;transform:scale(0.96);
+      animation:fadeInUp .9s ease-out forwards;
+      animation-delay:.4s;
+    }
+    @keyframes fadeInUp{
+      to{opacity:1;transform:scale(1)}
     }
   </style>
 </head>
 
 <body>
-<div class="hearts" id="hearts"></div>
+  <div class="burstLayer" id="burstLayer"></div>
 
-<div class="wrap">
-<div class="card">
+  <div class="wrap">
+    <div class="card" id="card">
 
-<h1>Egzamin Walentynkowy 💘</h1>
-<div class="badge" id="badge">START</div>
+      <!-- HEADER -->
+      <div id="header">
+        <div class="heroTitle">
+          <span class="heart">💘</span>
+          <span>EGZAMIN WALENTYNKOWY</span>
+          <span class="heart">💘</span>
+        </div>
+        <p class="sub">Najpierw 10 pytań o nas. Potem dopiero „to pytanie”. 😏</p>
+      </div>
 
-<!-- START -->
-<div id="start" class="panel start">
-  <h2>Okej… wiem, że chcesz już usłyszeć to pytanie 😏</h2>
-  <p class="big">
-    Ono zdecyduje o Twoim losie na <b>14 lutego</b>.<br><br>
-    Ale najpierw… mały egzamin z <b>NAS</b>.<br><br>
-    (<b>10/10 poprawnych odpowiedzi</b> – inaczej wracamy na start 😌)
-  </p>
-  <button class="btn btnStart" id="startBtn">START ▶️</button>
-</div>
+      <!-- START -->
+      <div id="start" class="panel start">
+        <h2>Okej… wiem, że chcesz już usłyszeć to pytanie 😳</h2>
+        <p class="big">
+          Ono zdecyduje o Twoim losie na <b>14 lutego</b>.<br><br>
+          Ale zanim je usłyszysz… szybki test z <b>NAS</b>. 💘
+        </p>
+        <button class="btn btnStart" id="startBtn">START ▶️</button>
+        <p class="note">PS. Zakaz googlowania. Dozwolone: uśmiechanie się.</p>
+      </div>
 
-<!-- QUIZ -->
-<div id="quiz" class="panel hidden">
-  <h2 id="question"></h2>
-  <div class="answers" id="answers"></div>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-</div>
+      <!-- QUIZ -->
+      <div id="quiz" class="panel hidden">
+        <h2 class="qTitle" id="question"></h2>
+        <div class="answers" id="answers"></div>
+        <div class="mini">Pytanie <span id="idx">1</span>/10</div>
+      </div>
 
-<!-- FINAL -->
-<div id="final" class="panel final hidden">
-  <h2>Oficjalnie 😳</h2>
-  <p class="big"><b>Czy zostaniesz moją Walentynką? 💘</b></p>
-  <div class="two">
-    <button class="btn" id="yes">TAK 💖</button>
-    <button class="btn ghost" id="no">NIE 😶</button>
+      <!-- FINAL -->
+      <div id="final" class="panel final hidden">
+        <div class="official">OFICJALNIE 😳</div>
+        <div class="question">Czy zostaniesz moją Walentynką? 💘</div>
+        <div class="two">
+          <button class="btnYes" id="yes">TAK 💖</button>
+          <button class="btnNo" id="no">NIE 😶</button>
+        </div>
+        <p class="note" id="finalNote"></p>
+      </div>
+
+      <!-- CELEBRATE -->
+      <div id="celebrate" class="panel celebrate hidden">
+        <h2>HURRAAA 😄💖</h2>
+        <p>
+          No to mamy plan na <b>14 lutego</b>.<br>
+          Kocham Cię. I teraz już oficjalnie nie ma odwrotu. 😌
+        </p>
+
+        <img
+          class="fade-in"
+          src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWk4ZmpxYjBjNWZwc3h6b2FuNnp3dXd6bTQybmk1NW5ua2xwZ3phbyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xiPqQWAF25RD4Omzyq/giphy.gif"
+          alt="Taylor Swift celebrating"
+          style="
+            margin-top:20px;max-width:300px;width:100%;
+            border-radius:18px;display:block;margin-left:auto;margin-right:auto;
+            box-shadow:0 22px 60px rgba(0,0,0,.45);
+          "
+        >
+
+        <p class="fade-in" style="margin-top:18px;font-size:16px;color:#ffd3ea;font-weight:600;line-height:1.35;animation-delay:1.2s">
+          Podjęłaś bardzo dobrą decyzję.<br>
+          A 14 lutego wieczorem dowiesz się, <b>jak bardzo</b> dobrą… 😏
+        </p>
+      </div>
+
+      <!-- Audio -->
+      <audio id="song" preload="auto">
+        <source src="love-story.mp3" type="audio/mpeg" />
+      </audio>
+
+    </div>
   </div>
-</div>
-
-<audio id="song">
-  <source src="love-story.mp3" type="audio/mpeg">
-</audio>
-
-</div>
-</div>
 
 <script>
-const QUIZ = [
- {q:"Jak się nazywała fancy restauracja w Bolonii?", a:["Donatello","Marsalino","Vicolocolombina","Trattoria Da Menella Torre"], c:0},
- {q:"Która pozycja była pierwsza podczas naszego pierwszego razu?", a:["Missionary","Doggy","Cowgirl","Spooning"], c:0},
- {q:"Jaka jest moja ulubiona część Twojego ciała?", a:["Każda","Oczy","Bubis","Tyłek"], c:0},
- {q:"Co piliśmy do posiłku, który pierwszy raz Ci ugotowałem?", a:["Szampan","Wino białe","Cola Zero","Woda"], c:0},
- {q:"Gdzie byliśmy na naszej pierwszej randce?", a:["Na spacerze nad jeziorem","W kawiarni","Na pizzy","Na bilardzie"], c:0},
- {q:"Nasze ulubione miejsce do bycia razem?", a:["Pod kołderką","Na plaży","W samochodzie","Na imprezie"], c:0},
- {q:"Gdzie będziemy mieszkać w przyszłości?", a:["Nieważne gdzie, ważne że razem","USA","Polska","Włochy"], c:0},
- {q:"Nasz największy wspólny luksus?", a:["Seks","Czas","Podróże","Spokój"], c:0},
- {q:"Fundament naszego związku?", a:["Lojalność","Chemia","Przyjaźń","Pasja"], c:0},
- {q:"Jedyna pewna rzecz w moich planach?", a:["Kochać Cię","Sukces","Stabilizacja","Hajs"], c:0}
-];
+  const QUIZ = [
+    { q:"1) Jak się nazywała fancy restauracja w Bolonii?", a:["Vicolocolombina","Donatello","Marsalino","Trattoria Da Menella Torre"], c:1 },
+    { q:"2) Która pozycja była pierwsza podczas naszego pierwszego razu?", a:["Doggy","Cowgirl","Missionary","Spooning"], c:2 },
+    { q:"3) Jaka jest moja ulubiona część Twojego ciała?", a:["Tyłek","Każda","Oczy","Bubis"], c:1 },
+    { q:"4) Co piliśmy do posiłku, który pierwszy raz Ci ugotowałem?", a:["Cola Zero","Wino białe","Woda","Szampan"], c:3 },
+    { q:"5) Gdzie byliśmy na naszej pierwszej randce?", a:["Na spacerze nad jeziorem","W kawiarni","Na bilardzie","Na pizzy"], c:0 },
+    { q:"6) Nasze ulubione miejsce do bycia razem?", a:["Na plaży","Pod kołderką","W samochodzie","Na imprezie"], c:1 },
+    { q:"7) Gdzie będziemy mieszkać w przyszłości?", a:["We Włoszech","W Polsce","Nieważne gdzie, ważne że razem","W USA"], c:2 },
+    { q:"8) Nasz największy wspólny luksus?", a:["Czas","Seks","Spokój","Podróże"], c:1 },
+    { q:"9) Fundament naszego związku?", a:["Pasja","Lojalność","Chemia","Przyjaźń"], c:1 },
+    { q:"10) Jedyna pewna rzecz w moich planach?", a:["Hajs","Kochać cię","Sukces","Stabilizacja"], c:1 }
+  ];
 
-let i=0;
-const start=document.getElementById("start");
-const quiz=document.getElementById("quiz");
-const final=document.getElementById("final");
-const q=document.getElementById("question");
-const a=document.getElementById("answers");
-const bar=document.getElementById("bar");
-const hearts=document.getElementById("hearts");
-const song=document.getElementById("song");
+  const header = document.getElementById("header");
+  const startBox = document.getElementById("start");
+  const quizBox = document.getElementById("quiz");
+  const finalBox = document.getElementById("final");
+  const celebrateBox = document.getElementById("celebrate");
 
-document.getElementById("startBtn").onclick=()=>{
- start.classList.add("hidden");
- quiz.classList.remove("hidden");
- render();
-};
+  const questionEl = document.getElementById("question");
+  const answersEl = document.getElementById("answers");
+  const idxEl = document.getElementById("idx");
+  const finalNote = document.getElementById("finalNote");
 
-function render(){
- q.textContent=QUIZ[i].q;
- a.innerHTML="";
- QUIZ[i].a.forEach((t,idx)=>{
-  const b=document.createElement("button");
-  b.className="choice";
-  b.textContent=t;
-  b.onclick=()=>pick(idx);
-  a.appendChild(b);
- });
- bar.style.width=(i/QUIZ.length*100)+"%";
-}
+  const burstLayer = document.getElementById("burstLayer");
+  const song = document.getElementById("song");
 
-function pick(idx){
- if(idx!==QUIZ[i].c){location.reload();return;}
- i++;
- if(i<QUIZ.length)render();
- else finish();
-}
+  let i = 0, correctCount = 0;
 
-function finish(){
- quiz.classList.add("hidden");
- final.classList.remove("hidden");
- bar.style.width="100%";
-}
+  function burstEmojis(emoji, count){
+    let spawned = 0;
+    const t = setInterval(()=>{
+      for(let k=0;k<7;k++){
+        spawnEmoji(emoji); spawned++;
+        if(spawned>=count){clearInterval(t);break;}
+      }
+    },90);
+  }
+  function spawnEmoji(emoji){
+    const el=document.createElement("div");
+    el.className="burst"; el.textContent=emoji;
+    el.style.left=(Math.random()*100)+"vw";
+    el.style.bottom="-40px";
+    el.style.fontSize=(14+Math.random()*26)+"px";
+    const d=(2.8+Math.random()*2.2);
+    el.style.animationDuration=d+"s";
+    burstLayer.appendChild(el);
+    setTimeout(()=>el.remove(),(d*1000)+300);
+  }
 
-document.getElementById("yes").onclick=async()=>{
- for(let i=0;i<120;i++){
-  const h=document.createElement("div");
-  h.className="heart";
-  h.textContent="💖";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=14+Math.random()*22+"px";
-  hearts.appendChild(h);
-  setTimeout(()=>h.remove(),4000);
- }
- try{await song.play();}catch(e){}
-};
+  function render(){
+    idxEl.textContent=String(i+1);
+    questionEl.textContent=QUIZ[i].q;
+    answersEl.innerHTML="";
+    QUIZ[i].a.forEach((txt,idx)=>{
+      const b=document.createElement("button");
+      b.className="choice"; b.textContent=txt;
+      b.onclick=()=>pick(idx);
+      answersEl.appendChild(b);
+    });
+  }
+  function lock(){[...answersEl.children].forEach(b=>b.disabled=true);}
+  function pick(idx){
+    lock();
+    if(idx===QUIZ[i].c){
+      correctCount++;
+      answersEl.children[idx].style.borderColor="rgba(0,255,170,.65)";
+      burstEmojis("💖",90);
+    }else{
+      answersEl.children[idx].style.borderColor="rgba(255,80,80,.75)";
+      answersEl.children[QUIZ[i].c].style.borderColor="rgba(0,255,170,.55)";
+      burstEmojis("😔",90);
+    }
+    setTimeout(()=>{ i++; i<QUIZ.length?render():finish(); },700);
+  }
+  function finish(){
+    header.classList.add("hidden");
+    quizBox.classList.add("hidden");
+    finalBox.classList.remove("hidden");
+    finalNote.textContent=`Wynik: ${correctCount}/10 😌`;
+  }
 
-document.getElementById("no").onclick=()=>{
- document.getElementById("no").style.transform=
-  `translate(${Math.random()*120-60}px,${Math.random()*80-40}px)`;
-};
+  document.getElementById("startBtn").onclick=()=>{
+    startBox.classList.add("hidden");
+    quizBox.classList.remove("hidden");
+    render();
+  };
+
+  document.getElementById("yes").onclick=async()=>{
+    burstEmojis("💖",160);
+    try{await song.play();}catch(e){}
+    setTimeout(()=>{
+      finalBox.classList.add("hidden");
+      celebrateBox.classList.remove("hidden");
+      burstEmojis("😄",70);
+    },1400);
+  };
+  document.getElementById("no").onclick=()=>{
+    burstEmojis("😔",60);
+    const b=document.getElementById("no");
+    b.style.transform=`translate(${Math.random()*180-90}px,${Math.random()*120-60}px)`;
+  };
 </script>
 </body>
 </html>
